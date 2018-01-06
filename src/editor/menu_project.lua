@@ -194,8 +194,7 @@ local function getNameToRun(skipcheck)
 
   local doc = ide:GetDocument(editor)
   local name = ide:GetProjectStartFile() or doc:GetFilePath()
-  if not name then doc:SetModified(true) end
-  if not SaveIfModified(editor) then return end
+  if not name and not SaveIfModified(editor) then return end
   if ide.config.editor.saveallonrun then SaveAll(true) end
 
   return wx.wxFileName(name or doc:GetFilePath())
