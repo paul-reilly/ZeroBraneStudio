@@ -164,7 +164,18 @@ function LoadFile(filePath, editor, file_must_exist, skipselection)
     editor:SetUseTabs(string.find(file_text, "\t") ~= nil
       or edcfg.usetabs and (file_text:find("%f[^\r\n] ") or file_text:find("^ ")) == nil)
   end
-  
+
+  -- config option to use custom settings for pattern matched files
+  if edcfg.matchedfilesettings then
+    for _, v in pairs(edcfg.matchedfilesettings) do
+      if v.pattern and filePath:find(v.pattern) then
+        editor:SetUseTabs(v.tabs and true or false)
+        editor:SetIndent(v.tabwidth and v.tabwidth or 2)
+        break
+      end
+    end
+  end
+
   if (file_text and edcfg.checkeol) then
     -- Auto-detect CRLF/LF line-endings
     local foundcrlf = string.find(file_text,"\r\n") ~= nil
